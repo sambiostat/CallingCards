@@ -1,0 +1,59 @@
+Readme
+##########################################################
+#Porject: Calling_Cards
+#Data:2015/03/17
+#Author:JINCHUN ZHANG
+##########################################################
+CallingCards.py:
+        The warpped scripts for running all the folowing code.
+        use option [--h] to see the help and usage.
+
+Precutchr.py
+        Used to 1) pre-filter data based on position count and 2) add 5^n bonus to positions with more than one insertions 3) partition data set into 22files based on chr
+        Input: txt data with format "chromosome  position count".
+Output: 24 txt format data for 24 chromosomes, sorted by position, 1st column is Chromosome and the 2nd column is the position, 3rd column is their number of independent insertion with 5^N bonus for N>1, 4th column is the number of independent insertion without the 5^N bonus.
+*cutoff is used for filter out the independent insertions based on their own count which is the 3rd column of the input dataset
+*pwd is the directory of Input/
+
+QTCluster.py
+Used to conduct Quality Threhold cluster method to genome position. Allow setting window size. It partition Experimental dataset into subclusters.
+Input: txt format data, the output from Precutchr.py.
+Output: 24 csv format files for 24 chromosomes with format “Position,Cluster,Independent_Insertions_withBonus,Independent_Insertions,Chromosome".
+
+Combine.py
+Used to combine the Q-T clustered experimental data and the control data.
+Input: the directory of QTcluster.py output
+Output: One csv file,each row is one cluster, with format:
+Chromosome
+Cluster,
+Start,  
+Stop,  
+BkgHop,
+BkgHop_withBonus,  
+ExpHop, 
+ExpHop_withBonus
+
+
+Simpletest.py
+used to find subcluster has significant insertion due to SP1 transcripson.
+Input: Combine csv which has all clustered information, and WT/combine.csv which gives us the total number of wild hops.
+Output: One file with two P values for all the clusters.
+        Header is
+                Chromsome
+                Total_WT_insertion
+                Total_Exp_Insertion
+                Start
+                Stop
+                P_value_from_Poission
+                P_value_from_Hypergeomeric
+                Exphop
+                WThop
+
+Annotated.py
+Used for annotated Significant output. Find the closest gene and its trancription start, transcription end on both upstream and downs stream.
+Input: the Significant insertion file, output of the Simpleteste.py
+                   the refGene data with bed format which can be found at the Code file.
+Ouput: the txt file of annotated significant insertions. Header is
+
+' Chromosome, Total_WT_insertion, Total_Exp_Insertion, Start,Stop,P_value_from_Poission,Exphop,WThop,Closest_Upstream_Gene,CUTStart,CUTEnd,CUTstrand,Closest_Downstream_Gene,CDTStart,CDTEnd,CDTstrand'.
+
